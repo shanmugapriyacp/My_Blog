@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'menu.html' %}
+<div style="margin-top: 80px; width: 900px; margin:80px auto;">
+    {% for like in likes %}
+        <p>
+            {{ like.user.username }}
+        </p>
+    {% endfor %}
+</div>
+{% endblock content %}

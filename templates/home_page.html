@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} Post blogs {% endblock title %}
+
+{% block content %}
+{% include 'menu.html' %}
+<p>Welcome to MyBLOG!!!</p>
+
+<h3>Recent Posts</h3>
+
+{% for post in posts %}
+
+<div>
+    <p style="border:1px solid blue;">
+        <h4>{{ post.post_title }}</h4>
+        <p>{{ post.date_published }}</p>
+        <p style="border: 1px solid black; margin: 25px 50px; background-color: lightblue;">
+            {{ post.post_content }}
+        </p>
+        <p> Posted by {{ post.user }}</p>
+        <form method="POST" action="/likes/{{ post.id }}">
+            {% csrf_token %}
+            <input type='submit' value='Like'>
+        </form>
+
+        <a href="/likes/{{ post.id }}">Likes</a>
+        <a href="/comment/{{ post.id }}">comments</a>
+    </p>
+</div>
+
+{% endfor %}
+
+{% endblock content %}

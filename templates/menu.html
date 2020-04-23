@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    <li> <a href="{% url 'home' %}"> HOME </a> </li>
+    {% if user.is_authenticated %}
+    <li> <a href="{% url 'new_post' %}"> New Post </a> </li>
+    <li> <a href="{% url 'logout' %}"> Logout </a> </li>
+    {% else %}
+    <li> <a href="{% url 'register' %}"> SignUp </a> </li>
+    <li> <a href="{% url 'login' %}"> LogIn </a> </li>
+    {% endif %}
+</ul>
+
+{% endblock content %}

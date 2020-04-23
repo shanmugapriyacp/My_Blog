@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'menu.html' %}
+<div style="margin-top: 80px; width: 900px; margin:80px auto;">
+    <p style="border:1px solid blue;">
+        <h4>{{ post.post_title }}</h4>
+        <p>{{ post.date_published }}</p>
+        <p style="border: 1px solid black; margin: 25px 50px; background-color: lightblue;">
+            {{ post.post_content }}
+        </p>
+        <p> Posted by {{ post.user }}</p>
+        {% if request.user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <input type='hidden' name='post_id' value='{{ post.id }}'>
+                <input type='hidden' name='user_id' value='{{ user.id }}'>
+                <input type='submit' value='Post comment'>
+            </form>
+        {% else %}
+            <p>You must login to comment </p>
+        {% endif %}
+    </p>
+
+        {% for comment in post_comments %}
+
+        <blockquote>
+          <p>{{ comment.content }}</p>
+          <footer style="background-color: pink;">via {{ comment.user }} | {{ comment.timestamp|timesince }} ago | {% if comment.children.count > 0 %}{{ comment.children.count }} Comment{% if comment.children.count > 1 %}s{% endif %} | {% endif %}</footer>
+          <div class='comment-reply'>
+              {% for child_comment in comment.children %}
+                <blockquote>
+                <p>{{ child_comment.content }}</p>
+                <footer style="background-color: pink;">via {{ child_comment.user }} | {{ child_comment.timestamp|timesince }} ago</footer>
+                {% for sub_child_comment in child_comment.children %}
+                     <blockquote>
+                        <p>{{ sub_child_comment.content }}</p>
+                        <footer style="background-color: pink;">via {{ sub_child_comment.user }} | {{ sub_child_comment.timestamp|timesince }} ago</footer>
+                     </blockquote>
+                    {% endfor %}
+                         {% if request.user.is_authenticated %}
+                            <form method="POST">
+                                {% csrf_token %}
+                                {{ comment_form.as_p }}
+                                <input type='hidden' name='post_id' value='{{ post.id }}'>
+                                <input type='hidden' name='user_id' value='{{ user.id }}'>
+                                <input type='hidden' name='parent_id' value='{{ child_comment.id }}'>
+                                <input type='submit' value='Reply'>
+                            </form>
+                    {% else %}
+                        <p>You must login to comment </p>
+                    {% endif %}
+            </blockquote>
+             {% endfor %}
+             {% if request.user.is_authenticated %}
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <input type='hidden' name='post_id' value='{{ post.id }}'>
+                    <input type='hidden' name='user_id' value='{{ user.id }}'>
+                    <input type='hidden' name='parent_id' value='{{ comment.id }}'>
+                    <input type='submit' value='Reply'>
+                </form>
+            {% else %}
+                <p>You must login to comment </p>
+            {% endif %}
+        </div>
+
+        </blockquote>
+
+        <hr/>
+        {% endfor %}
+</div>
+{% endblock content %}
