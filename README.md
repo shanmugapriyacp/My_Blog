@@ -8,7 +8,7 @@
 - HTML
 - Jinja template 
 
-Functionalities of the blog
+## Functionalities of the blog
 
 - Register user
 - Sign In and Sign Out user
@@ -20,7 +20,7 @@ Functionalities of the blog
 - reply to a reply
 - view the liked users
 
-Pages created
+## Pages created
 
 - Home page
 - Login page
